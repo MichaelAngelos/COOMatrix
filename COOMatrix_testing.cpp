@@ -86,40 +86,59 @@ public:
         }
     }
 
-    void append(COOMatrix appending_matrix,bool appendbelowrows){
+    bool append(COOMatrix appending_matrix,bool appendbelowrows){
+
+        //the boolean appendbelowrows serves as an option to either
+        //append along rows or along columns.Because the processes
+        //are similar,they are defined in the same function
+        
         if (appendbelowrows==true){
+            //check if matrices are suitable for appending
             if (appending_matrix.colnum==this->colnum){
                 
-                //increase appendee's row size by the sum of total rows
+                //increase appendee's row size by the sum of total rows and keep
+                //current so we can properly add data
                 size_t previous_row_size=this->rownum;
                 this->rownum=this->rownum + appending_matrix.rownum;
 
                 for(size_t i=0; i < appending_matrix.get_length_of_data();i++){
                     //push the appending data down so it is added after current data
+                    //and add other data normally
                     row.push_back(appending_matrix.get_row_data(i)+previous_row_size);
                     col.push_back(appending_matrix.get_col_data(i));
                     values.push_back(appending_matrix.get_values_data(i));
                 }
+
+                //return true if appending is successful
+                return true;
             }
+            //return false if matrices are not suitable for appending
+            else return false;
         }
         else{
             if (appending_matrix.rownum==this->rownum){
-                
-                //increase appendee's column size by the sum of the total columns
+                //increase appendee's column size by the sum of the total columns and keep
+                //current so we can properly add data
                 size_t previous_column_size=this->colnum;
                 this->colnum=this->colnum + appending_matrix.colnum;
 
                 for(size_t i=0; i < appending_matrix.get_length_of_data();i++){
+                    //push the appending data right so it is added after current data
+                    //and add other data normally
                     row.push_back(appending_matrix.get_row_data(i));
                     col.push_back(appending_matrix.get_col_data(i)+previous_column_size);
                     values.push_back(appending_matrix.get_values_data(i));
                 }
+                //return true if appending is successful
+                return true;
             }
+            //return false if matrices are not suitable for appending
+            else return false;
         }
     }
 
     void printthis(){
-        cout<<"Matrix x length:"<<rownum<<"\nMatrix y length:"<<colnum<<'\n';
+        cout<<"Matrix row size:"<<rownum<<"\nMatrix column size:"<<colnum<<'\n';
         cout<<"row indexes: ";
         for (int value : row) {
             cout<<" "<<value<<",";
@@ -136,18 +155,23 @@ public:
     }
     
     void printthis_matrix(){
+        //Print the data in the form of a matrix
         T matrix[rownum][colnum];
         
+        //For any non-existent data,display the type's constructor.
+        //Not suitable for string type but who keeps text in matrix form anyway
         for (size_t i=0;i<rownum;i++){
             for (size_t j=0;j<colnum;j++){
                 matrix[i][j]=T();
             }
         }
-
+        
+        //populate the matrix with existing data
         for(size_t i=0;i < row.size();i++){
             matrix[row[i]][col[i]]=values[i];
         }
 
+        //display matrix data
         for (size_t i=0;i<rownum;i++){
             for (size_t j=0;j<colnum;j++){
                 cout<<matrix[i][j]<<" ";
@@ -179,11 +203,11 @@ int main() {
     test3.set(0,0,1);
     test3.printthis();
     test3.printthis_matrix();
-    test2.append(test3,0);
+    test2.append(test3,1);
     test2.printthis();
     test2.printthis_matrix();
 
-    cout<<test.get(0,3)<<'\n';
-    cout<<test.get(1,3)<<'\n';
-    cout<<test.get(1,1)<<'\n';
+    cout<<test2.get(0,1)<<'\n';
+    cout<<test2.get(1,3)<<'\n';
+    cout<<test2.get(5,2)<<'\n';
 };
