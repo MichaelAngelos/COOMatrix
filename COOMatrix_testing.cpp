@@ -32,7 +32,7 @@ public:
             }
         }
         //In case there is no element in this representation
-        return "no";
+        return T();
     }
 
     void set(int x,int y,T value){
@@ -82,7 +82,7 @@ public:
         
         for (size_t i=0;i<rownum;i++){
             for (size_t j=0;j<colnum;j++){
-                matrix[i][j]="0";
+                matrix[i][j]=T();
             }
         }
 
@@ -101,11 +101,11 @@ public:
 };
 
 int main() {
-    COOMatrix<string> test(4,6);
-    test.set(0,3,"hello");
-    test.set(1,1,"test");
-    test.set(3,2,"this");
-    test.set(5,1,"oh nooo");
+    COOMatrix<double> test(4,6);
+    test.set(0,3,3.14);
+    test.set(1,1,2.57);
+    test.set(3,2,0.1);
+    test.set(5,1,42.25);
     test.printthis();
     test.printthis_matrix();
 
