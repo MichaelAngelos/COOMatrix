@@ -18,7 +18,25 @@ public:
         values = {};
     }
 
+    int get(int x,int y){
+        if ((x<rownum)&&(y<colnum)){
+            for(size_t i=0;i<row.size();i++){
+                if (row[i]==x){
+                    if (col[i]==y){
+                        return values[i];
+                    }
+                }
+            }
+        }
+        //In case there is no element in this representation
+        return -1;
+    }
+
     void set(int x,int y,int value){
+        //in case the data being added exceeds the matrix's size
+        if(rownum < x+1) rownum=x+1;
+        if (colnum < y+1) colnum=y+1;
+
         bool checkifexisting=false;
 
         //Check if index of value that is a bout to be set exists.If it does,only modify value
@@ -27,6 +45,7 @@ public:
         for (size_t i=0;i < row.size();i++){
             if ((row[i]==x)&&(col[i]==y)){
                 checkifexisting=true;
+                cout<<"test"<<'\n';
                 values[i]=value;
             }
         }
@@ -83,6 +102,11 @@ int main() {
     test.set(0,3,1);
     test.set(1,1,2);
     test.set(3,2,3);
+    test.set(5,1,4);
     test.printthis();
     test.printthis_matrix();
+
+    cout<<test.get(0,3)<<'\n';
+    cout<<test.get(1,3)<<'\n';
+    cout<<test.get(1,1)<<'\n';
 };
