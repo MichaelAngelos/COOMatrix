@@ -22,6 +22,10 @@ private:
     }
 
 public:
+    COOMatrix(){
+        ;
+    }
+
     COOMatrix(int x, int y){
         rownum = x;
         colnum = y;
@@ -40,6 +44,9 @@ public:
     size_t get_length_of_data(){
         return row.size();
     };
+    T get_type(){
+        return typeofvalues;
+    }
 
     T get(size_t x,size_t y){
         if ((x<rownum)&&(y<colnum)){
@@ -137,6 +144,29 @@ public:
         }
     }
 
+    //This function splices the matrix provided in the arguement into another matrix
+    //based on the start and end,rows and columns given
+    //Can properly extract row,column or submatrix
+
+    COOMatrix splicing(COOMatrix matrix,size_t rowStart,size_t rowEnd,size_t columnStart,size_t columnEnd){
+        //Properly define the size of rows and columns of new matrix
+        COOMatrix<T> result(rowEnd-rowStart+1,columnEnd-columnStart+1);
+
+        //Along the data indexes of matrix which we are splicing
+        for(size_t i=0; i < matrix.get_length_of_data(); i++){
+            //If this data entry is within row Start and End bounds
+            if ((matrix.get_row_data(i)<=rowEnd)&&(matrix.get_row_data(i)>=rowStart)){
+                //If this data entry is within column Start and End bounds
+                if ((matrix.get_col_data(i)<=columnEnd)&&(matrix.get_col_data(i)>=columnStart)){
+                    //Add this data entry to the resulting COOMatrix,properly
+                    //converting the row index and column index from original matrix to the new one
+                    result.set(matrix.get_row_data(i)-rowStart,matrix.get_col_data(i)-columnStart,matrix.get_values_data(i));
+                }
+            }
+        }
+        return result;
+    }
+
     void printthis(){
         cout<<"Matrix row size:"<<rownum<<"\nMatrix column size:"<<colnum<<'\n';
         cout<<"row indexes: ";
@@ -182,7 +212,7 @@ public:
 
 };
 
-int main() {
+int testing2() {
     COOMatrix<int> test(4,6);
     test.set(0,3,3);
     test.set(1,1,2);
@@ -211,3 +241,18 @@ int main() {
     cout<<test2.get(1,3)<<'\n';
     cout<<test2.get(5,2)<<'\n';
 };
+
+int main(){
+    COOMatrix<int> test(4,6);
+    test.set(1,4,3);
+    test.set(1,1,2);
+    test.set(3,2,5);
+    test.set(3,1,8);
+    test.printthis();
+    test.printthis_matrix();
+
+    COOMatrix<int> test2(1,1);
+    test2=test2.splicing(test,1,3,0,2);
+    test2.printthis();
+    test2.printthis_matrix();
+}
