@@ -3,22 +3,25 @@
 
 using namespace std;
 
+template <typename T>
 class COOMatrix {
 private:
-    int rownum,colnum;
-    vector<int> row,col,values;
+    T typeofvalues;
+    size_t rownum,colnum;
+    vector<size_t> row,col;
+    vector<T> values;
 
 public:
-    COOMatrix(int x,int y){
+    COOMatrix(int x, int y){
         rownum = x;
         colnum = y;
 
         row = {};
         col = {};
-        values = {};
+        values={};
     }
 
-    int get(int x,int y){
+    T get(size_t x,size_t y){
         if ((x<rownum)&&(y<colnum)){
             for(size_t i=0;i<row.size();i++){
                 if (row[i]==x){
@@ -29,10 +32,10 @@ public:
             }
         }
         //In case there is no element in this representation
-        return -1;
+        return "no";
     }
 
-    void set(int x,int y,int value){
+    void set(int x,int y,T value){
         //in case the data being added exceeds the matrix's size
         if(rownum < x+1) rownum=x+1;
         if (colnum < y+1) colnum=y+1;
@@ -68,18 +71,18 @@ public:
             cout<<" "<<value<<",";
         }
         cout<<"\n     values: ";
-        for (int value : values) {
+        for (T value : values) {
             cout<<" "<<value<<",";
         }
         cout<<"\n";
     }
     
     void printthis_matrix(){
-        int matrix[rownum][colnum];
+        T matrix[rownum][colnum];
         
-        for (int i=0;i<rownum;i++){
-            for (int j=0;j<colnum;j++){
-                matrix[i][j]=0;
+        for (size_t i=0;i<rownum;i++){
+            for (size_t j=0;j<colnum;j++){
+                matrix[i][j]="0";
             }
         }
 
@@ -87,8 +90,8 @@ public:
             matrix[row[i]][col[i]]=values[i];
         }
 
-        for (int i=0;i<rownum;i++){
-            for (int j=0;j<colnum;j++){
+        for (size_t i=0;i<rownum;i++){
+            for (size_t j=0;j<colnum;j++){
                 cout<<matrix[i][j]<<" ";
             }
             cout<<"\n";
@@ -98,11 +101,11 @@ public:
 };
 
 int main() {
-    COOMatrix test(4,6);
-    test.set(0,3,1);
-    test.set(1,1,2);
-    test.set(3,2,3);
-    test.set(5,1,4);
+    COOMatrix<string> test(4,6);
+    test.set(0,3,"hello");
+    test.set(1,1,"test");
+    test.set(3,2,"this");
+    test.set(5,1,"oh nooo");
     test.printthis();
     test.printthis_matrix();
 
