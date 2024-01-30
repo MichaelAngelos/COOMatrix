@@ -80,7 +80,6 @@ public:
             for (size_t i=0;i < row.size();i++){
                 if ((row[i]==x)&&(col[i]==y)){
                     checkifexisting=true;
-                    cout<<"test"<<'\n';
                     values[i]=value;
                 }
             }
@@ -184,6 +183,28 @@ public:
         cout<<"\n";
     }
     
+    //Overloading the multiplication operator for Matrix Multiplication
+    COOMatrix operator*(COOMatrix& matrixB) {
+        if (get_col_num()!=matrixB.get_row_num()){
+            cerr<<"Matrix Dimensions are not compatible"<<'\n';
+        }
+        else {
+            COOMatrix<T> result(get_row_num(),matrixB.get_col_num());
+
+            for (size_t i=0;i <get_row_num();i++){
+                for (size_t j=0; j < matrixB.get_col_num();j++){
+                    for (size_t k=0; k < get_col_num();k++){
+                        result.set(i, j, result.get(i,j) + (get(i,k) * matrixB.get(k,j)));
+                    }
+                }
+            }
+
+            return result;
+        }
+        COOMatrix<T> results(1,1);
+        return results;
+    }
+
     void printthis_matrix(){
         //Print the data in the form of a matrix
         T matrix[rownum][colnum];
@@ -240,9 +261,10 @@ int testing2() {
     cout<<test2.get(0,1)<<'\n';
     cout<<test2.get(1,3)<<'\n';
     cout<<test2.get(5,2)<<'\n';
+    return 0;
 };
 
-int main(){
+int main2(){
     COOMatrix<int> test(4,6);
     test.set(1,4,3);
     test.set(1,1,2);
@@ -255,4 +277,26 @@ int main(){
     test2=test2.splicing(test,1,3,0,2);
     test2.printthis();
     test2.printthis_matrix();
+    return 0;
+}
+
+int main(){
+    COOMatrix<int> test(3,4);
+    test.set(1,1,3);
+    test.set(2,2,2);
+    test.set(2,3,5);
+    test.set(2,1,8);
+    test.printthis();
+    test.printthis_matrix();
+
+    COOMatrix<int> test2(4,2);
+    test2.set(0,0,2);
+    test2.set(1,0,3);
+    test2.printthis();
+    test2.printthis_matrix();
+    COOMatrix<int> test3=test*test2;
+    test3.printthis();
+    test3.printthis_matrix();
+
+    return 0;
 }
